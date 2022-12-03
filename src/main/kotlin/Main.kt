@@ -1,9 +1,11 @@
 import days.Day1
+import days.Day2
 import java.nio.file.Paths
 
 fun main() {
     val days: MutableList<Pair<String, String>> = mutableListOf()
     days.add(executeExercise(Day1(), "day1"))
+    days.add(executeExercise(Day2(), "day2"))
     days.forEachIndexed {i, dayResults -> printResults(i, dayResults) }
 }
 
