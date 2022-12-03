@@ -6,8 +6,18 @@ class Day3 : Exercise {
     override fun a(input: List<String>): String {
         return input
             .map { splitIntoCompartments(it) }
-            .map { findDuplicate(it) }
-            .sumOf { convertToPriority(it) }
+            .map { findDuplicateA(it) }
+            .map { convertToPriority(it) }
+            .sum()
+            .toString()
+    }
+
+    override fun b(input: List<String>): String {
+        return input
+            .chunked(3)
+            .map { findDuplicateB(it) }
+            .map { convertToPriority(it) }
+            .sum()
             .toString()
     }
 
@@ -15,15 +25,19 @@ class Day3 : Exercise {
         return if (duplicate.isUpperCase()) duplicate.code - 38 else duplicate.code - 96
     }
 
-    private fun findDuplicate(compartments: Pair<String, String>): Char {
+    private fun findDuplicateA(compartments: Pair<String, String>): Char {
         return compartments.first.toSet()
             .intersect(compartments.second.toSet())
             .first()
     }
-
-    override fun b(input: List<String>): String {
-        return input
-            .toString()
+    private fun findDuplicateB(input: List<String>): Char {
+        val first = input[0].toSet()
+        val second = input[1].toSet()
+        val third = input[2].toSet()
+        return first.toSet()
+            .intersect(second)
+            .intersect(third)
+            .first()
     }
 
     private fun splitIntoCompartments(input: String): Pair<String, String> {

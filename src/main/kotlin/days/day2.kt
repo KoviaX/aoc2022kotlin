@@ -102,8 +102,6 @@ enum class HandShape(val pointValue: Int) {
     }
 }
 
-
-
 enum class GameResult(val pointValue: Int) {
     WIN(6),
     LOSE(0),
