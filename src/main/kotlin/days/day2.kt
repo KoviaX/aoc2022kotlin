@@ -28,33 +28,32 @@ class Day2 : Exercise {
     }
 
     private fun calculateRoundResultA(mine: HandShape, theirs: HandShape): Int {
-        val result = when (mine) {
+        when (mine) {
             HandShape.ROCK -> {
-                val rockValue = HandShape.ROCK.pointValue
+                return HandShape.ROCK.pointValue +
                 when (theirs) {
-                    HandShape.PAPER -> rockValue + GameResult.LOSE.pointValue
-                    HandShape.ROCK -> rockValue + GameResult.DRAW.pointValue
-                    HandShape.SCISSORS -> rockValue + GameResult.WIN.pointValue
+                    HandShape.PAPER -> GameResult.LOSE.pointValue
+                    HandShape.ROCK -> GameResult.DRAW.pointValue
+                    HandShape.SCISSORS -> GameResult.WIN.pointValue
                 }
             }
             HandShape.PAPER -> {
-                val paperValue = HandShape.PAPER.pointValue
+                return HandShape.PAPER.pointValue +
                 when (theirs) {
-                    HandShape.SCISSORS -> paperValue + GameResult.LOSE.pointValue
-                    HandShape.PAPER -> paperValue + GameResult.DRAW.pointValue
-                    HandShape.ROCK -> paperValue + GameResult.WIN.pointValue
+                    HandShape.SCISSORS -> GameResult.LOSE.pointValue
+                    HandShape.PAPER -> GameResult.DRAW.pointValue
+                    HandShape.ROCK -> GameResult.WIN.pointValue
                 }
             }
             HandShape.SCISSORS -> {
-                val scissorValue = HandShape.SCISSORS.pointValue
+                return HandShape.SCISSORS.pointValue +
                 when (theirs) {
-                    HandShape.ROCK -> scissorValue + GameResult.LOSE.pointValue
-                    HandShape.SCISSORS -> scissorValue + GameResult.DRAW.pointValue
-                    HandShape.PAPER -> scissorValue + GameResult.WIN.pointValue
+                    HandShape.ROCK -> GameResult.LOSE.pointValue
+                    HandShape.SCISSORS -> GameResult.DRAW.pointValue
+                    HandShape.PAPER -> GameResult.WIN.pointValue
                 }
             }
         }
-        return result
     }
 
     private fun calculateRoundResultB(theirs: HandShape, desiredResult: GameResult): Int {
