@@ -1,7 +1,4 @@
-import days.Day1
-import days.Day2
-import days.Day3
-import days.Day4
+import days.*
 import java.nio.file.Paths
 
 fun main() {
@@ -10,6 +7,7 @@ fun main() {
     days.add(executeExercise(Day2(), "day2.txt"))
     days.add(executeExercise(Day3(), "day3.txt"))
     days.add(executeExercise(Day4(), "day4.txt"))
+    days.add(executeExercise(Day5(), "day5.txt"))
     days.forEachIndexed {i, dayResults -> printResults(i, dayResults) }
 }
 
