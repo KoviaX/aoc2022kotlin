@@ -4,10 +4,7 @@ import Exercise
 
 class Day5 : Exercise {
     override fun a(input: List<String>): String {
-        val (initialStacks, initialMoves, amountOfStacks) = getInputs(input)
-
-        val stacks = fillStacks(initialStacks.dropLast(1), amountOfStacks)
-        val moves = initialMoves.map { createMove(it) }
+        val (stacks, moves) = createStacksAndMoves(input)
 
         moves.forEach { move ->
             stacks[move.to].crates.addAll(stacks[move.from].crates.takeLast(move.amount).reversed())
@@ -15,7 +12,27 @@ class Day5 : Exercise {
         }
 
         return stacks.map { it.crates.last() }
-            .fold("") {acc, value -> acc + value}
+            .fold("") { acc, value -> acc + value }
+    }
+
+    override fun b(input: List<String>): String {
+        val (stacks, moves) = createStacksAndMoves(input)
+
+        moves.forEach { move ->
+            stacks[move.to].crates.addAll(stacks[move.from].crates.takeLast(move.amount))
+            repeat(move.amount) { stacks[move.from].crates.removeLast() }
+        }
+
+        return stacks.map { it.crates.last() }
+            .fold("") { acc, value -> acc + value }
+    }
+
+    private fun createStacksAndMoves(input: List<String>): Pair<MutableList<CargoStack>, List<Move>> {
+        val (initialStacks, initialMoves, amountOfStacks) = getInputs(input)
+
+        val stacks = fillStacks(initialStacks.dropLast(1), amountOfStacks)
+        val moves = initialMoves.map { createMove(it) }
+        return Pair(stacks, moves)
     }
 
     private fun getInputs(input: List<String>): Triple<List<String>, List<String>, Int> {
@@ -24,11 +41,6 @@ class Day5 : Exercise {
         val initialMoves = inputLinesSplitByCategory[1].lines()
         val amountOfStacks = initialStacks.reversed()[0].last().digitToInt()
         return Triple(initialStacks, initialMoves, amountOfStacks)
-    }
-
-    override fun b(input: List<String>): String {
-        return input
-            .toString()
     }
 
     private fun fillStacks(initialStacksAsLines: List<String>, stackAmount: Int): MutableList<CargoStack> {

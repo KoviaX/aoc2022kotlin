@@ -22,6 +22,6 @@ internal class Day5Test {
         // When
         val result = Day5().b(input)
         // Then
-        assertThat(result).isEqualTo("12")
+        assertThat(result).isEqualTo("MCD")
     }
 }
