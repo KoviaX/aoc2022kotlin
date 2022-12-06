@@ -8,6 +8,7 @@ fun main() {
     days.add(executeExercise(Day3(), "day3.txt"))
     days.add(executeExercise(Day4(), "day4.txt"))
     days.add(executeExercise(Day5(), "day5.txt"))
+    days.add(executeExercise(Day6(), "day6.txt"))
     days.forEachIndexed {i, dayResults -> printResults(i, dayResults) }
 }
 
