@@ -5,8 +5,11 @@ import Exercise
 class Day7 : Exercise {
     override fun a(input: List<String>): String {
         val parsedRootDir = parseInitialStructure(input)
-        val totalSize = recursiveSize(mutableListOf(parsedRootDir), 0)
-        return totalSize.toString()
+        return parsedRootDir.getFlatDirectoryList()
+            .map { recursiveSize(mutableListOf( it), 0) }
+            .filter { it < 100_000 }
+            .sum()
+            .toString()
     }
 
 
@@ -51,7 +54,9 @@ class Day7 : Exercise {
         val parent: Directory? = null,
         val directories: MutableList<Directory> = mutableListOf(),
         val files: MutableList<File> = mutableListOf()
-    )
+    ) {
+        fun getFlatDirectoryList(): List<Directory> = directories + directories.flatMap { it.getFlatDirectoryList() }
+    }
 
     data class File(val name: String, val size: Int)
 
