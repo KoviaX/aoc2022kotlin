@@ -6,12 +6,23 @@ class Day7 : Exercise {
     override fun a(input: List<String>): String {
         val parsedRootDir = parseInitialStructure(input)
         return parsedRootDir.getFlatDirectoryList()
-            .map { recursiveSize(mutableListOf( it), 0) }
+            .map { recursiveSize(mutableListOf(it), 0) }
             .filter { it < 100_000 }
             .sum()
             .toString()
     }
 
+
+    override fun b(input: List<String>): String {
+        val parsedRootDir = parseInitialStructure(input)
+        val freeSpace = 70_000_000 - recursiveSize(mutableListOf(parsedRootDir), 0)
+
+        val smallestDirectoryThatSolvesIssue = parsedRootDir.getFlatDirectoryList()
+            .filter { recursiveSize(mutableListOf(it), 0) >= (30_000_000 - freeSpace) }
+            .minBy { recursiveSize(mutableListOf(it), 0) }
+
+        return recursiveSize(mutableListOf(smallestDirectoryThatSolvesIssue), 0).toString()
+    }
 
     private fun parseInitialStructure(input: List<String>): Directory {
         val rootDir = Directory(name = "/")
@@ -59,8 +70,4 @@ class Day7 : Exercise {
     }
 
     data class File(val name: String, val size: Int)
-
-    override fun b(input: List<String>): String {
-        return ""
-    }
 }
