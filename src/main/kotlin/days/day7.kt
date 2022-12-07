@@ -5,8 +5,8 @@ import Exercise
 class Day7 : Exercise {
     override fun a(input: List<String>): String {
         val parsedRootDir = parseInitialStructure(input)
-        recursiveSize(parsedRootDir, 0)
-        return ""
+        val totalSize = recursiveSize(mutableListOf(parsedRootDir), 0)
+        return totalSize.toString()
     }
 
 
@@ -18,16 +18,32 @@ class Day7 : Exercise {
             when {
                 commandLine == "$ cd /" -> currentDir = rootDir
                 commandLine == "$ cd .." -> currentDir = currentDir.parent ?: Directory("/")
-                commandLine.startsWith("$ cd") -> currentDir = currentDir.directories.first { it.name == commandLine.substringAfter("cd ") }
-                commandLine.startsWith("dir") -> currentDir.directories.add(Directory(commandLine.substringAfter("dir "), currentDir))
-                !commandLine.contains("$") -> currentDir.files.add(File(commandLine.substringAfter(" "), commandLine.substringBefore(" ").toInt()))
+                commandLine.startsWith("$ cd") -> currentDir =
+                    currentDir.directories.first { it.name == commandLine.substringAfter("cd ") }
+
+                commandLine.startsWith("dir") -> currentDir.directories.add(
+                    Directory(
+                        commandLine.substringAfter("dir "),
+                        currentDir
+                    )
+                )
+
+                !commandLine.contains("$") -> currentDir.files.add(
+                    File(
+                        commandLine.substringAfter(" "),
+                        commandLine.substringBefore(" ").toInt()
+                    )
+                )
             }
         }
         return rootDir
     }
 
-    private fun recursiveSize(directory: Directory, size: Int): Int {
-        return directory.files.sumOf { it.size } + directory.directories.sumOf { recursiveSize(directory, size) }
+    private tailrec fun recursiveSize(directories: MutableList<Directory>, size: Int): Int {
+        var newSize = size
+        directories.forEach { dir -> newSize += (dir.files.sumOf { it.size }) }
+        return if (directories.all { it.directories.isEmpty() }) newSize
+        else recursiveSize(directories.flatMap { it.directories }.toMutableList(), newSize)
     }
 
     data class Directory(
