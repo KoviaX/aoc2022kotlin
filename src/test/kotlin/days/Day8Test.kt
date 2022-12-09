@@ -21,6 +21,6 @@ internal class Day8Test {
         // When
         val result = Day8().b(input)
         // Then
-        assertThat(result).isEqualTo("d")
+        assertThat(result).isEqualTo("8")
     }
 }
