@@ -13,32 +13,46 @@ class Day9 : Exercise {
     }
 
     private fun followTrail(input: List<String>): Int {
-        val headCoordinate = Point(0, 0)
-        val tailCoordinate = Point(0, 0)
-        val coordinatesVisitedByHead = mutableListOf(headCoordinate)
-        val kaas = commandToSteps(input).fold (headCoordinate) { acc, direction ->
-            val newPos = Direction.getNewPosition(acc, direction)
-            coordinatesVisitedByHead.add(newPos)
-            newPos
-        }
+        val coordinatesVisitedByHead = visitCoordinatesWithHead(Point(0, 0), input)
+        val coordinatesVisitedByTail = visitCoordinatesWithTail(Point(0, 0), coordinatesVisitedByHead)
+        return coordinatesVisitedByTail.toSet().count()
+    }
+
+    private fun visitCoordinatesWithTail(
+        tailCoordinate: Point,
+        coordinatesVisitedByHead: MutableList<Point>
+    ): MutableList<Point> {
         val coordinatesVisitedByTail = mutableListOf(tailCoordinate)
-        coordinatesVisitedByHead.fold (tailCoordinate) { acc, headCoord ->
+        coordinatesVisitedByHead.fold(tailCoordinate) { acc, headCoord ->
             val newPos = determineTailCoordinate(acc, headCoord)
             coordinatesVisitedByTail.add(newPos)
             newPos
         }
-        println(coordinatesVisitedByTail)
-        return coordinatesVisitedByTail.toSet().count()
+        return coordinatesVisitedByTail
+    }
+
+    private fun visitCoordinatesWithHead(
+        headCoordinate: Point,
+        input: List<String>
+    ): MutableList<Point> {
+        val coordinatesVisitedByHead = mutableListOf(headCoordinate)
+        commandToSteps(input).fold(headCoordinate) { acc, direction ->
+            val newPos = Direction.getNewPosition(acc, direction)
+            coordinatesVisitedByHead.add(newPos)
+            newPos
+        }
+        return coordinatesVisitedByHead
     }
 
     private fun commandToSteps(input: List<String>): List<Direction> {
         return input
             .map { it.split(" ") }
-            .flatMap { multiplyCommand(it) }
+            .flatMap { multiplyIntoDirectionsPerStep(it) }
     }
 
-    private fun multiplyCommand(commandPair: List<String>): List<Direction> {
-        return (1..commandPair[1].toInt()).map { Direction.valueOf(commandPair[0]) }
+    private fun multiplyIntoDirectionsPerStep(commandPair: List<String>): List<Direction> {
+        return (1..commandPair[1].toInt())
+            .map { Direction.valueOf(commandPair[0]) }
     }
 
     private fun determineTailCoordinate(tailCoordinate: Point, headCoordinate: Point): Point {
